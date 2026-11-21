@@ -80,6 +80,12 @@ other clients keep showing), the player joins with it, and when they first play,
 their own key sets their `pfp` on chain to the same URL
 (`MsgPlayerUpdatePfp`).
 
+Members who have already joined change their picture from their own profile:
+the edit button on their portrait opens the same gallery over the profile, and
+the scientist they click becomes their `pfp` on chain at once, signed by their own
+key (`MsgPlayerUpdatePfp`); the profile and HUD show it, and a line under their
+name says whether it went through (`mad/runtime/scientists.js`).
+
 ## Which guild
 
 The site is Mad Scientists': its guild is `0-9`, fixed in `webpack.config.js`

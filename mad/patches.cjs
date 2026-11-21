@@ -124,6 +124,12 @@ module.exports = {
     ['  renderHTML() {\n    if (!this.pfp) {', '  renderHTML() {\n    return __mad.pfp.html(this.pfp, this.renderLayersHTML());\n  }\n\n  renderLayersHTML() {\n    if (!this.pfp) {'],
   ],
   // Sign-up: "Choose scientist" beside the generated picture (mad/runtime/scientists.js).
+  // The player's own profile: the edit button on their portrait opens the
+  // gallery (mad/runtime/scientists.js), and the picture they choose is set on chain.
+  'js/view_models/account/AccountProfileViewModel.js': [
+    ['<div class="profile-header-image">${pfpViewer.renderHTML()}</div>', '<div class="profile-header-image">${pfpViewer.renderHTML()}</div>${__mad.scientists.profileButtonHTML(this)}'],
+    ['  initPageCode() {\n    if (this.isOwnProfile) {\n', '  initPageCode() {\n    if (this.isOwnProfile) {\n      __mad.scientists.mountProfile(this, MenuPage);\n'],
+  ],
   'js/view_models/signup/SetUsernameViewModel.js': [
     ...navLabel,
     ['    this.initPfp();\n', '    this.initPfp();\n    __mad.scientists.mount(this, MenuPage);\n'],
