@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mad-scientists",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 5193
+    },
+    {
+      "name": "mad-scientists-dist",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5194", "--directory", "dist"],
+      "port": 5194
+    }
+  ]
+}

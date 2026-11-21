@@ -1,0 +1,40 @@
+{
+  "guild": {
+    "schema_version": 1,
+    "id": "0-9",
+    "name": "Mad Scientists",
+    "description": "Mad Scientists Structs Guild",
+    "tag": "MAD",
+    "logo": "https://madscientists.structs.zone/mad/img/mad-scientists-logo.png",
+    "webapp": "madscientists.structs.zone",
+    "website": "https://www.madscientists.io/",
+    "recruiting": {
+      "status": "open"
+    },
+    "socials": {
+      "bluesky": "",
+      "facebook": "",
+      "farcaster": "",
+      "instagram": "",
+      "twitch": "",
+      "x": "https://x.com/madscientists_x",
+      "youtube": "",
+      "discord_contact": "",
+      "discord_server": "https://discord.gg/VNRwYvZW7Q",
+      "telegram_contact": "",
+      "telegram_channel": ""
+    },
+    "denom": {
+      "6": "beaker",
+      "0": "ubeaker"
+    },
+    "services": {
+      "guild_api": "https://beta.playstructs.com/api/",
+      "reactor_api": "https://public.testnet.structs.network/",
+      "client_websocket": "wss://public.testnet.structs.network:26657/websocket",
+      "grass_nats_websocket": "wss://beta.playstructs.com:1443",
+      "matrix": "https://matrix.beta.playstructs.com",
+      "explorer": ""
+    }
+  }
+}
