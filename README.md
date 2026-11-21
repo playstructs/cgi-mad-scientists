@@ -44,6 +44,42 @@ runs the check, which lists what the update touched:
 `npm test` fails while any remain. The build shows stale patches as warnings.
 Commit the submodule pointer together with the overlay.
 
+## Profile pictures
+
+Every portrait (the HUD, profile, guild roster, player search, scans, spectator
+and device activation) shows the player's own picture, their `pfp` on chain,
+when it is a URL a browser can load: `https` (`http` is upgraded), or `ipfs://`,
+`ipns://` and `ar://` through the ipfs.io and arweave.net gateways. webapp's
+generated portrait stays underneath, and shows when a player has no such
+picture or it fails to load (`mad/runtime/pfp.js`). Sector Blitz's public raid
+lists are the exception: the guild API sends them only the generated portrait's
+attributes, so they show a player's picture only when it is in those too, as it
+is for everyone who signs up here.
+
+At sign-up, **Choose scientist** beside the generated picture opens a gallery
+of every Mad Scientist, `#1` to `#10000`, edge to edge in one endless scroll
+(more are added as the player nears the end; images load as they come into
+view). A player who knows their scientist's number finds it: the gallery
+scrolls to it and outlines it. Clicking a scientist chooses it. No wallet is
+involved: the picture is the player's choice. The gallery's controls are
+webapp's own SUI components: screen buttons, the text input and its warning,
+and the close link (`mad/runtime/scientists.js`).
+
+The portraits are this site's own files, `mad/public/pfp/<id>.png`, served at
+`https://madscientists.structs.zone/pfp/<id>.png`, which is the URL a player's
+`pfp` holds, so any client can link them. The page itself loads them from its
+own origin, so they show in development too. They are the collection's
+originals (`../MadScientists/images`, 2400px) at the 192px their pixel art is
+drawn on, the same picture at a fifth of the bytes (15 MB for all 10,000);
+`mad/scripts/make-pfps.py` rebuilds them (Pillow).
+
+That URL can't go into the sign-up request's `pfp`: the guild API requires it
+to be JSON, which the chain then refuses as a pfp. So it goes in
+`pfp_client_render_attributes` as `url` (beside the generated layers, which
+other clients keep showing), the player joins with it, and when they first play,
+their own key sets their `pfp` on chain to the same URL
+(`MsgPlayerUpdatePfp`).
+
 ## Which guild
 
 The site is Mad Scientists': its guild is `0-9`, fixed in `webpack.config.js`
@@ -93,13 +129,16 @@ npm run build        # dist/
 ```
 
 `dist/` is a static site: `index.html` (webapp's game page), the bundles in
-`js/` and webapp's `css/`, `img/`, `lottie/` and fonts, plus `guild.json` and
-Mad Scientists' art in `mad/`. It uses absolute paths, so serve it from the root
-of `madscientists.structs.zone`; it needs nothing else on that domain, but `guild.json`
-must be readable cross-origin (`Access-Control-Allow-Origin: *`), since other
-clients read it. `.github/workflows/pages.yml` publishes it to GitHub Pages.
+`js/` and webapp's `css/`, `img/`, `lottie/` and fonts, plus `guild.json`, Mad
+Scientists' art in `mad/` and the 10,000 portraits in `pfp/`. It uses absolute
+paths, so serve it from the root of `madscientists.structs.zone`; it needs
+nothing else on that domain, but `guild.json` must be readable cross-origin
+(`Access-Control-Allow-Origin: *`), since other clients read it, and so should
+`pfp/`, for other clients showing players' pictures.
+`.github/workflows/pages.yml` publishes it to GitHub Pages (which sends that
+header for every file).
 
 ## Licences
 
-structs-webapp is Apache-2.0 (Slow Ninja Inc). Mad Scientists' logo and icons in
-`mad/public/` are Mad Scientists' own, used for its guild.
+structs-webapp is Apache-2.0 (Slow Ninja Inc). Mad Scientists' logo, icons and
+portraits in `mad/public/` are Mad Scientists' own, used for its guild.

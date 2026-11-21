@@ -84,6 +84,35 @@ module.exports = {
     ["this.apiUrl = '/api/public/sector-blitz';", guildApi('/public/sector-blitz')],
   ],
 
+  // Players' own pictures (mad/runtime/pfp.js): every portrait shows a player's
+  // pfp URL, over webapp's generated layers, which remain the fallback. The URL
+  // rides in the render attributes, which every portrait already receives.
+  'js/models/PfpClientRenderAttributes.js': [
+    ['    return new PfpClientRenderAttributes(\n      obj.head ?? null,', '    return __mad.pfp.keepUrl(obj, new PfpClientRenderAttributes(\n      obj.head ?? null,'],
+    ['      obj.background ?? null\n    );', '      obj.background ?? null\n    ));'],
+  ],
+  'js/factories/PlayerFactory.js': [
+    ['player.pfp_client_render_attributes = PfpClientRenderAttributes.fromJson(player.pfp_client_render_attributes);',
+      'player.pfp_client_render_attributes = __mad.pfp.attributes(player.pfp, PfpClientRenderAttributes.fromJson(player.pfp_client_render_attributes));'],
+  ],
+  'js/factories/PlayerSearchResultDTOFactory.js': [
+    ['player.pfp_client_render_attributes = PfpClientRenderAttributes.fromJson(player.pfp_client_render_attributes);',
+      'player.pfp_client_render_attributes = __mad.pfp.attributes(player.pfp, PfpClientRenderAttributes.fromJson(player.pfp_client_render_attributes));'],
+  ],
+  'js/view_models/login/ActivateDeviceVerifyViewModel.js': [
+    ['PfpClientRenderAttributes.fromJson(this.activationCodeInfo.pfp_client_render_attributes)',
+      '__mad.pfp.attributes(this.activationCodeInfo.pfp, PfpClientRenderAttributes.fromJson(this.activationCodeInfo.pfp_client_render_attributes))'],
+  ],
+  'js/view_models/components/PfpViewerComponent.js': [
+    ['  renderHTML() {\n    if (!this.pfp) {', '  renderHTML() {\n    return __mad.pfp.html(this.pfp, this.renderLayersHTML());\n  }\n\n  renderLayersHTML() {\n    if (!this.pfp) {'],
+  ],
+  // Sign-up: "Choose scientist" beside the generated picture (mad/runtime/scientists.js).
+  'js/view_models/signup/SetUsernameViewModel.js': [
+    ...navLabel,
+    ['    this.initPfp();\n', '    this.initPfp();\n    __mad.scientists.mount(this, MenuPage);\n'],
+    ['    regeneratePfpBtn.disabled = true;\n', '    regeneratePfpBtn.disabled = true;\n    __mad.scientists.lock();\n'],
+  ],
+
   // Mad Scientists in place of SN Corp.
   'templates/game/index.html.twig': [
     ['{% block title %}Structs{% endblock %}', `{% block title %}${GUILD} | Structs{% endblock %}`],
@@ -129,7 +158,6 @@ module.exports = {
   'js/view_models/signup/IncomingCall3ViewModel.js': [
     ['`<strong>SN.CORP:</strong> Greetings, SN.CORPORATION employee.', `\`<strong>${GUILD_CAPS}:</strong> Greetings, ${GUILD_CAPS} employee.`],
   ],
-  'js/view_models/signup/SetUsernameViewModel.js': navLabel,
   'js/view_models/templates/OrientationStructDeployedTemplate.js': navLabel,
   'js/view_models/templates/HRBotTalkingTemplate.js': navLabel,
 };
