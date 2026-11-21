@@ -86,6 +86,20 @@ the scientist they click becomes their `pfp` on chain at once, signed by their o
 key (`MsgPlayerUpdatePfp`); the profile and HUD show it, and a line under their
 name says whether it went through (`mad/runtime/scientists.js`).
 
+## Sign-up and the player's key
+
+Sign-up has no recovery key section: once the player has chosen their name,
+the page makes their account's key (a mnemonic) and creates the account
+straight away, with nothing shown, explained or confirmed, and goes on to
+Success. If the guild can't create it, the player sees why and can try again
+with the same key (`mad/runtime/account.js`).
+
+The Account page has **Download Player** where webapp has **Log Out**: a text
+file, `<name>-<player id>.structs-player.txt`, holding the mnemonic this
+browser signs with. After sign-up that is the account's own key; after an
+account recovery or a device activation it is this browser's device key, which
+can recover the player too, for as long as that device stays registered.
+
 ## Which guild
 
 The site is Mad Scientists': its guild is `0-9`, fixed in `webpack.config.js`
