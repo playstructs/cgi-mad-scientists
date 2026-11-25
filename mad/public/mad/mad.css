@@ -100,6 +100,11 @@ html img.pfp-viewer-layer.mad-pfp-url {
   container: mad-scientist-picker / size;
 }
 
+/* The page under an open gallery stays put: scrolled, it would carry the gallery off. */
+#menu-page-screen-body:has(.mad-scientist-picker:not(.hidden)) {
+  overflow: hidden;
+}
+
 .mad-scientist-picker-layout {
   box-sizing: border-box;
   height: 100%;
@@ -128,6 +133,7 @@ html img.pfp-viewer-layer.mad-pfp-url {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .mad-scientist-grid {
