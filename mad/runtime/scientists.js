@@ -10,9 +10,8 @@
 // is the player's choice.
 //
 // Its controls are webapp's own SUI components: screen buttons, the text input
-// with its warning and the close link.
+// and the close link.
 import {FIRST_ID, LAST_ID, scientistId, scientistPath, scientistUrl, attributes} from './pfp.js';
-import {bindSubmitButtonToInput} from '../../structs-webapp/src/js/util/SubmitButtonToggle.js';
 import {PfpViewerComponent} from '../../structs-webapp/src/js/view_models/components/PfpViewerComponent.js';
 
 const BATCH = 120;
@@ -82,26 +81,25 @@ function createPicker(host, {current, say, choose, viewport = null}) {
   panel.id = 'mad-scientist-picker';
   panel.className = 'mad-scientist-picker hidden';
   panel.innerHTML = `
-    <div class="mad-scientist-picker-header">
-      <span class="sui-text-header">Mad Scientists</span>
-      <a id="mad-scientist-close" class="sui-screen-nav-close" href="javascript: void(0)" aria-label="Close">
-        <i class="sui-icon-sm icon-close"></i>
-      </a>
-    </div>
-    <div class="common-inline-text-input-group-container">
-      <div class="common-inline-text-input-controls-container">
-        <label class="sui-input-text" for="mad-scientist-id">
-          <span>Find by Number</span>
-          <input type="text" inputmode="numeric" autocomplete="off" name="mad-scientist-id" id="mad-scientist-id" placeholder="${FIRST_ID} to ${LAST_ID}">
-        </label>
-        <button id="mad-scientist-id-btn" class="sui-screen-btn sui-mod-disabled" type="button" disabled>Find</button>
+    <div class="mad-scientist-picker-layout">
+      <div class="mad-scientist-picker-header">
+        <span class="sui-text-header">Mad Scientists</span>
+        <a id="mad-scientist-close" class="sui-screen-nav-close" href="javascript: void(0)" aria-label="Close">
+          <i class="sui-icon-sm icon-close"></i>
+        </a>
       </div>
-      <div class="common-inline-text-input-error-container">
-        <div id="mad-scientist-id-error" class="sui-input-text-warning">Enter a number from ${FIRST_ID} to ${LAST_ID}.</div>
+      <div class="common-inline-text-input-group-container">
+        <div class="common-inline-text-input-controls-container">
+          <label class="sui-input-text" for="mad-scientist-id">
+            <span>Find by Number</span>
+            <input type="text" inputmode="numeric" autocomplete="off" name="mad-scientist-id" id="mad-scientist-id" placeholder="${FIRST_ID} to ${LAST_ID}">
+          </label>
+          <button id="mad-scientist-id-btn" class="sui-screen-btn sui-mod-disabled" type="button" disabled>Find</button>
+        </div>
       </div>
-    </div>
-    <div id="mad-scientist-scroll" class="mad-scientist-scroll">
-      <div id="mad-scientist-grid" class="mad-scientist-grid"></div>
+      <div id="mad-scientist-scroll" class="mad-scientist-scroll">
+        <div id="mad-scientist-grid" class="mad-scientist-grid"></div>
+      </div>
     </div>`;
   host.append(panel);
 
@@ -109,7 +107,6 @@ function createPicker(host, {current, say, choose, viewport = null}) {
   const grid = panel.querySelector('#mad-scientist-grid');
   const idInput = panel.querySelector('#mad-scientist-id');
   const idButton = panel.querySelector('#mad-scientist-id-btn');
-  const idError = panel.querySelector('#mad-scientist-id-error');
 
   let next = FIRST_ID; // the first scientist not yet in the grid
   const tile = id => grid.querySelector(`[data-scientist="${id}"]`);
@@ -174,7 +171,7 @@ function createPicker(host, {current, say, choose, viewport = null}) {
       reveal(chosen, {mark: false, smooth: false});
     }
     fill();
-    say(`Pick your scientist. Know its number? Find it.`);
+    say('Pick your scientist, or find it by number.');
   };
 
   const close = () => panel.classList.add('hidden');
@@ -186,18 +183,19 @@ function createPicker(host, {current, say, choose, viewport = null}) {
 
   const find = () => {
     const id = parseId(idInput.value);
-    if (id === null) {
-      idError.classList.add('sui-mod-show');
-      return;
-    }
-    idError.classList.remove('sui-mod-show');
+    if (id === null) return;
     reveal(id);
     fill();
     say(`There's #${id}. Click it to make it yours.`);
   };
 
-  bindSubmitButtonToInput(idInput, () => idButton);
-  idInput.addEventListener('input', () => idError.classList.remove('sui-mod-show'));
+  // Find is on only while the number is one it can find.
+  idInput.addEventListener('input', () => {
+    const found = parseId(idInput.value) !== null;
+    idButton.disabled = !found;
+    idButton.classList.toggle('sui-mod-primary', found);
+    idButton.classList.toggle('sui-mod-disabled', !found);
+  });
   idInput.addEventListener('keyup', event => {
     if (event.key === 'Enter') find();
   });

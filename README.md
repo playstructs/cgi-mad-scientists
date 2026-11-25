@@ -62,8 +62,9 @@ of every Mad Scientist, `#1` to `#10000`, edge to edge in one endless scroll
 view). A player who knows their scientist's number finds it: the gallery
 scrolls to it and outlines it. Clicking a scientist chooses it. No wallet is
 involved: the picture is the player's choice. The gallery's controls are
-webapp's own SUI components: screen buttons, the text input and its warning,
-and the close link (`mad/runtime/scientists.js`).
+webapp's own SUI components: screen buttons, the text input and the close link
+(`mad/runtime/scientists.js`). **Find** is on only for a number the collection
+has. On a short screen its number field and close link share one row.
 
 The portraits are this site's own files, `mad/public/pfp/<id>.png`, served at
 `https://madscientists.structs.zone/pfp/<id>.png`, which is the URL a player's
